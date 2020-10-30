@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Application.Interfaces.Repositories;
+using Core.Entities;
 
-namespace Application.Interfaces
+namespace Application.Interfaces.Repositories
 {
-    public interface IClientRepository
+    public interface IClientRepository : IGenericRepository<Client>
     {
     }
 }
