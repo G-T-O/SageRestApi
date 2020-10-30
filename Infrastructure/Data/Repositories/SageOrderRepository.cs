@@ -1,15 +1,14 @@
-﻿using Application.Interfaces.Repositories;
-using Core.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
+using Application.Interfaces.Repositories;
+using Core.Entities;
 
 namespace Infrastructure.Data.Repositories
 {
-    public class ClientRepository : IClientRepository
+    public class SageOrderRepository : ISageOrderRepository
     {
-        public int AddAsync(Client entity)
+        public int AddAsync(Order entity)
         {
             throw new NotImplementedException();
         }
@@ -19,17 +18,17 @@ namespace Infrastructure.Data.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<IReadOnlyList<Client>> GetAllAsync()
+        public Task<IReadOnlyList<Order>> GetAllAsync()
         {
             throw new NotImplementedException();
         }
 
-        public Task<Client> GetByIdAsync(int id)
+        public Task<Order> GetByIdAsync(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<int> UpdateAsync(Client entity)
+        public Task<int> UpdateAsync(Order entity)
         {
             throw new NotImplementedException();
         }
