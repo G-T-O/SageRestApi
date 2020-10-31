@@ -5,7 +5,7 @@ namespace Application.Interfaces.Repositories
 {
     public interface IGenericRepository<T> where T : class
     {
-        Task<T> GetByIdAsync(int id);
+        Task<T> GetByIdAsync(string id);
         Task<IReadOnlyList<T>> GetAllAsync();
         int AddAsync(T entity);
         Task<int> UpdateAsync(T entity);

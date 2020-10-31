@@ -23,7 +23,7 @@ namespace Infrastructure.Data.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<Invoice> GetByIdAsync(int id)
+        public Task<Invoice> GetByIdAsync(string id)
         {
             throw new NotImplementedException();
         }
