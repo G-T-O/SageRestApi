@@ -9,7 +9,7 @@ namespace Infrastructure.Data.DbAccess
         public string GetConnectionString { get => _connectionString; }
     public DapperAccess()
         {
-            _connectionString = "Data Source=DESKTOP-OO9BUGL;Initial Catalog=S_QUALIFELEC;Integrated Security=True;MultipleActiveResultSets=True";
+            _connectionString = "Data Source=DESKTOP-OO9BUGL;Initial Catalog=BIJOU;Integrated Security=True;MultipleActiveResultSets=True";
             //TO DO Call the string from AppSettings
         }
     }
