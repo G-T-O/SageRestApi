@@ -19,7 +19,7 @@ namespace Infrastructure.Data.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<int> DeleteAsync(int id)
+        public Task<int> DeleteAsync(string id)
         {
             throw new NotImplementedException();
         }
