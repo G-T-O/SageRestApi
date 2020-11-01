@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Application.Interfaces.Repositories;
 using Core.Entities;
 using Microsoft.AspNetCore.Mvc;
@@ -21,13 +18,9 @@ namespace SageRestApi.Controllers
         }
         // GET: api/<ClientsController>
         [HttpGet]
-        public Client Get()
+        public async Task<IActionResult> Get()
         {
-            Client client = new Client()
-            {
-
-            };
-            return client;
+            return Ok(await _client.GetAllAsync());
         }
 
         // GET api/<ClientsController>/5
@@ -39,20 +32,23 @@ namespace SageRestApi.Controllers
 
         // POST api/<ClientsController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> AddClient(Client client)
         {
+            return Ok(await _client.AddAsync(client));
         }
 
         // PUT api/<ClientsController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut]
+        public async Task<IActionResult> Put(Client client)
         {
+            return Ok(await _client.UpdateAsync(client));
         }
 
         // DELETE api/<ClientsController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete("{ct_Num}")]
+        public async Task<IActionResult> Delete(string ct_Num)
         {
+            return Ok(await _client.DeleteAsync(ct_Num));
         }
     }
 }

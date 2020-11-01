@@ -2,9 +2,9 @@
 using Application.Interfaces.Repositories;
 using Core.Entities;
 using Dapper;
-using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Infrastructure.Data.Repositories
@@ -16,32 +16,44 @@ namespace Infrastructure.Data.Repositories
         {
             _dapperAccess = dapperAccess;
         }
-        public int AddAsync(Client entity)
+        public async Task<int> AddAsync(Client client)
         {
-            throw new NotImplementedException();
+            using (var connection = new SqlConnection(_dapperAccess.GetConnectionString))
+            {
+                return await connection.ExecuteAsync("INSERT INTO F_COMPTET (CT_Num) VALUES (@CT_Num)", client);
+            }
         }
 
-        public Task<int> DeleteAsync(int id)
+        public async Task<int> DeleteAsync(string CT_Num)
         {
-            throw new NotImplementedException();
+            using (var connection = new SqlConnection(_dapperAccess.GetConnectionString))
+            {
+                return await connection.ExecuteAsync("DELETE F_COMPTET WHERE CT_Num = @CT_Num", new { CT_Num });
+            }
         }
 
-        public Task<IReadOnlyList<Client>> GetAllAsync()
+        public async Task<IReadOnlyList<Client>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            using (var connection = new SqlConnection(_dapperAccess.GetConnectionString))
+            {
+                return (await connection.QueryAsync<Client>("SELECT * FROM F_COMPTET")).ToList();
+            }
         }
 
         public async Task<Client> GetByIdAsync(string CT_Num)
         {
             using (var connection = new SqlConnection(_dapperAccess.GetConnectionString))
             {
-                return await connection.QueryFirstOrDefaultAsync<Client>("SELECT * FROM F_COMPTET WHERE CT_Num =@CT_Num",new { CT_Num});
+                return await connection.QueryFirstOrDefaultAsync<Client>("SELECT * FROM F_COMPTET WHERE CT_Num = @CT_Num", new { CT_Num });
             }
         }
 
-        public Task<int> UpdateAsync(Client entity)
+        public async Task<int> UpdateAsync(Client client)
         {
-            throw new NotImplementedException();
+            using (var connection = new SqlConnection(_dapperAccess.GetConnectionString))
+            {
+                return await connection.ExecuteAsync("UPDATE F_COMPTET SET CT_Siret = @CT_Siret WHERE CT_Num=@CT_Num", client);
+            }
         }
     }
 }
