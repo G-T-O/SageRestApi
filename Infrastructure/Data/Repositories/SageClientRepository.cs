@@ -41,7 +41,46 @@ namespace Infrastructure.Data.Repositories
                     return 1;
                 }
                 IBOClient3 sageClient = null;
-                return 0;
+                try
+                {
+                    sageClient = (IBOClient3)_sageAccess.GetSageDatabase.CptaApplication.FactoryClient.Create();
+                    IBPTiers tiers = (IBPTiers)_sageAccess.GetSageDatabase.CptaApplication.FactoryTiersType.ReadTypeTiers(TiersType.TiersTypeClient);
+                    sageClient.CT_Num = tiers.NextCT_Num;
+                    client.CT_Num = sageClient.CT_Num;
+                    sageClient.CT_Siret = client.CT_Siret;
+                    sageClient.SetDefault();
+
+                    sageClient.CT_Intitule = client.CT_Intitule;
+                    sageClient.CT_Qualite = client.CT_Qualite;
+
+                    sageClient.Telecom.EMail = client.Email;
+                    sageClient.Telecom.Portable = client.Portable;
+                    sageClient.Telecom.Telecopie = client.Telecopie;
+                    sageClient.Telecom.Telephone = client.Telephone;
+
+                    sageClient.Adresse.Adresse = client.Adresse;
+                    sageClient.Adresse.Complement = client.Complement;
+                    sageClient.Adresse.CodePostal = client.CodePostal;
+                    sageClient.Adresse.Ville = client.Ville;
+                    sageClient.Adresse.Pays = client.Pays;
+                    sageClient.CT_Identifiant = client.CT_Identifiant;
+                    sageClient.WriteDefault();
+
+                    sageClient.Read();
+                    _sageAccess.GetSageDatabase.Close();
+                    return int.Parse(sageClient.CT_Num);
+                }
+                catch (Exception ex) when ((ex.Message.Equals("Cet élément est en cours d'utilisation !")))
+                {
+                    _sageAccess.GetSageDatabase.Close();
+                    return 0;
+                }
+                catch (Exception e)
+                {
+                    _sageAccess.GetSageDatabase.Close();
+                    return 0;
+                }
+
             }
         }
 
