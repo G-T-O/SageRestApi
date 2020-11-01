@@ -14,7 +14,7 @@ namespace Infrastructure.Data.Repositories
         {
             _sageAccess = sageAccess;
         }
-        public int AddAsync(Client entity)
+        public Task<int> AddAsync(Client entity)
         {
             throw new NotImplementedException();
         }

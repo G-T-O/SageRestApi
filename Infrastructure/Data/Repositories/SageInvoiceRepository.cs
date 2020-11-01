@@ -8,7 +8,7 @@ namespace Infrastructure.Data.Repositories
 {
     public class SageInvoiceRepository : ISageInvoiceRepository
     {
-        public int AddAsync(Invoice entity)
+        public Task<int> AddAsync(Invoice entity)
         {
             throw new NotImplementedException();
         }
