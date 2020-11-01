@@ -7,7 +7,7 @@ namespace Application.Interfaces.Repositories
     {
         Task<T> GetByIdAsync(string id);
         Task<IReadOnlyList<T>> GetAllAsync();
-        int AddAsync(T entity);
+        Task<int> AddAsync(T entity);
         Task<int> UpdateAsync(T entity);
         Task<int> DeleteAsync(int id);
     }
