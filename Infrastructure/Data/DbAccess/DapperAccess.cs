@@ -1,16 +1,17 @@
 ﻿using Application.Interfaces.Access;
-using System;
+using Microsoft.Extensions.Configuration;
 
 namespace Infrastructure.Data.DbAccess
 {
     public class DapperAccess : IDapperAccess
     {
+        private readonly IConfiguration _configuration;
         private readonly string _connectionString;
         public string GetConnectionString { get => _connectionString; }
-    public DapperAccess()
+    public DapperAccess(IConfiguration configuration)
         {
-            _connectionString = "Data Source=DESKTOP-OO9BUGL;Initial Catalog=BIJOU;Integrated Security=True;MultipleActiveResultSets=True";
-            //TO DO Call the string from AppSettings
+            _configuration = configuration;
+            _connectionString = _configuration.GetConnectionString("DefaultConnection");
         }
     }
 }
