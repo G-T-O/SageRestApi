@@ -12,7 +12,7 @@ namespace Infrastructure.Data.DbAccess
         private readonly string _sageDatabaseName;
         private readonly string _sageDetabaseInstance;
         private static readonly BSCIALApplication100c _sageDatabase = new BSCIALApplication100c();
-        private static object _databaseLock = new object(); 
+        private static readonly object _databaseLock = new object(); 
 
         public BSCIALApplication100c GetSageDatabase { get => _sageDatabase; }
         public string GetUsername { get => _sageUsername; }
