@@ -1,8 +1,0 @@
-﻿using Core.Entities;
-
-namespace Application.Interfaces.Repositories
-{
-    public interface ISageInvoiceRepository : IGenericRepository<Invoice>
-    {
-    }
-}
