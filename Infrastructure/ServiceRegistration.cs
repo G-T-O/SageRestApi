@@ -1,12 +1,9 @@
 ﻿using Application.Interfaces.Access;
+using Application.Interfaces.Sage.Repositories;
 using Application.Interfaces.Repositories;
-using Core.Entities;
 using Infrastructure.Data.DbAccess;
 using Infrastructure.Data.Repositories;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Infrastructure
 {
