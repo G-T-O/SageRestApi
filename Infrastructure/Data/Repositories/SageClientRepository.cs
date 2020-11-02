@@ -1,5 +1,5 @@
 ﻿using Application.Interfaces.Access;
-using Application.Interfaces.Repositories;
+using Application.Interfaces.Sage.Repositories;
 using Core.Entities;
 using Objets100cLib;
 using System;
@@ -11,7 +11,7 @@ namespace Infrastructure.Data.Repositories
     public class SageClientRepository : ISageClientRepository
     {
         private readonly ISageAccess _sageAccess;
-        public SageClientRepository (ISageAccess sageAccess)
+        public SageClientRepository(ISageAccess sageAccess)
         {
             _sageAccess = sageAccess;
         }
@@ -80,7 +80,6 @@ namespace Infrastructure.Data.Repositories
                     _sageAccess.GetSageDatabase.Close();
                     return 0;
                 }
-
             }
         }
 
