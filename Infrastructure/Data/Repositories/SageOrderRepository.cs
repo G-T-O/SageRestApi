@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Application.Interfaces.Repositories;
+using Application.Interfaces.Sage.Repositories;
 using Core.Entities;
 
 namespace Infrastructure.Data.Repositories
