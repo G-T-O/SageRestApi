@@ -1,4 +1,4 @@
-﻿using Application.Interfaces.Repositories;
+﻿using Application.Interfaces.Sage.Repositories;
 using Core.Entities;
 using System;
 using System.Collections.Generic;
