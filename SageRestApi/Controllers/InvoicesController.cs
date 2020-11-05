@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace SageRestApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/sage/[controller]")]
     [ApiController]
     public class InvoicesController : ControllerBase
     {
