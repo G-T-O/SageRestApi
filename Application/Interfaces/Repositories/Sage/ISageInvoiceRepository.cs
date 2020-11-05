@@ -1,5 +1,5 @@
 ﻿using Application.Interfaces.Repositories;
-using Core.Entities;
+using Core.Dto;
 
 namespace Application.Interfaces.Sage.Repositories
 {

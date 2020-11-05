@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Application.Interfaces.Sage.Repositories;
-using Core.Entities;
+using Core.Dto;
 
 namespace Infrastructure.Data.Repositories
 {

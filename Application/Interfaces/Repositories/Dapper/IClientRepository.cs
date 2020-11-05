@@ -1,4 +1,4 @@
-﻿using Core.Entities;
+﻿using Core.Dto;
 
 namespace Application.Interfaces.Repositories
 {

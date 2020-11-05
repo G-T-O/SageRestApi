@@ -1,6 +1,6 @@
 ﻿using Application.Interfaces.Access;
 using Application.Interfaces.Repositories;
-using Core.Entities;
+using Core.Dto;
 using Dapper;
 using System.Collections.Generic;
 using System.Data.SqlClient;
