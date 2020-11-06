@@ -18,10 +18,6 @@ namespace SageRestApi.Controllers
         }
         // GET: api/<ClientsController>
         [HttpGet]
-        public async Task<IActionResult> Get()
-        {
-            return Ok(await _client.GetAllAsync());
-        }
 
         // GET api/<ClientsController>/5
         [HttpGet("{id}")]

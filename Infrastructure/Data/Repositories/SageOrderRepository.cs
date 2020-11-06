@@ -18,11 +18,6 @@ namespace Infrastructure.Data.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<IReadOnlyList<Order>> GetAllAsync()
-        {
-            throw new NotImplementedException();
-        }
-
         public Task<Order> GetByIdAsync(string id)
         {
             throw new NotImplementedException();

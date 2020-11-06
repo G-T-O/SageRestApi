@@ -26,11 +26,6 @@ namespace Application.Services
             throw new NotImplementedException();
         }
 
-        public Task<IReadOnlyList<Client>> GetAllAsync()
-        {
-            throw new NotImplementedException();
-        }
-
         public Task<Client> GetByIdAsync(string id)
         {
             throw new NotImplementedException();

@@ -87,11 +87,6 @@ namespace Infrastructure.Data.Repositories
             }
         }
 
-        public Task<IReadOnlyList<Client>> GetAllAsync()
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<Client> GetByIdAsync(string ct_num)
         {
             lock (_sageAccess.DatabaseLock)

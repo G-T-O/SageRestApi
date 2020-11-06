@@ -32,14 +32,6 @@ namespace Infrastructure.Data.Repositories
             }
         }
 
-        public async Task<IReadOnlyList<Client>> GetAllAsync()
-        {
-            using (var connection = new SqlConnection(_dapperAccess.GetConnectionString))
-            {
-                return (await connection.QueryAsync<Client>("SELECT * FROM F_COMPTET")).ToList();
-            }
-        }
-
         public async Task<Client> GetByIdAsync(string CT_Num)
         {
             using (var connection = new SqlConnection(_dapperAccess.GetConnectionString))
