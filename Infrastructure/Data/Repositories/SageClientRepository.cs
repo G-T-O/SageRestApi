@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces.Access;
 using Application.Interfaces.Sage.Repositories;
-using Core.Entities;
+using Core.Dto;
+using Infrastructure.Data.Mapper;
 using Objets100cLib;
 using System;
 using System.Collections.Generic;
@@ -32,6 +33,7 @@ namespace Infrastructure.Data.Repositories
                 return false;
             }
         }
+
         public async Task<int> AddAsync(Client client)
         {
             lock (_sageAccess.DatabaseLock)
@@ -40,34 +42,19 @@ namespace Infrastructure.Data.Repositories
                 {
                     return 1;
                 }
-                IBOClient3 sageClient = null;
+
                 try
                 {
-                    sageClient = (IBOClient3)_sageAccess.GetSageDatabase.CptaApplication.FactoryClient.Create();
-                    IBPTiers tiers = (IBPTiers)_sageAccess.GetSageDatabase.CptaApplication.FactoryTiersType.ReadTypeTiers(TiersType.TiersTypeClient);
-                    sageClient.CT_Num = tiers.NextCT_Num;
-                    client.CT_Num = sageClient.CT_Num;
-                    sageClient.CT_Siret = client.CT_Siret;
+                    IBOClient3 sageClient = (IBOClient3)_sageAccess.GetSageDatabase.CptaApplication.FactoryClient.Create();
+                    sageClient.CT_Num = _sageAccess.GetSageDatabase.CptaApplication.FactoryTiersType.ReadTypeTiers(TiersType.TiersTypeClient).NextCT_Num;
+
+                    sageClient = ObjectMapper.ClientToNewIboClient(client, sageClient);
                     sageClient.SetDefault();
-
-                    sageClient.CT_Intitule = client.CT_Intitule;
-                    sageClient.CT_Qualite = client.CT_Qualite;
-
-                    sageClient.Telecom.EMail = client.Email;
-                    sageClient.Telecom.Portable = client.Portable;
-                    sageClient.Telecom.Telecopie = client.Telecopie;
-                    sageClient.Telecom.Telephone = client.Telephone;
-
-                    sageClient.Adresse.Adresse = client.Adresse;
-                    sageClient.Adresse.Complement = client.Complement;
-                    sageClient.Adresse.CodePostal = client.CodePostal;
-                    sageClient.Adresse.Ville = client.Ville;
-                    sageClient.Adresse.Pays = client.Pays;
-                    sageClient.CT_Identifiant = client.CT_Identifiant;
                     sageClient.WriteDefault();
-
                     sageClient.Read();
+
                     _sageAccess.GetSageDatabase.Close();
+
                     return int.Parse(sageClient.CT_Num);
                 }
                 catch (Exception ex) when ((ex.Message.Equals("Cet élément est en cours d'utilisation !")))
@@ -83,9 +70,21 @@ namespace Infrastructure.Data.Repositories
             }
         }
 
-        public Task<int> DeleteAsync(string id)
+        public async Task<int> DeleteAsync(string ct_num)
         {
-            throw new NotImplementedException();
+            lock (_sageAccess.DatabaseLock)
+            {
+                if (!OpenDatabase())
+                {
+                    return 0;
+                }
+                if (_sageAccess.GetSageDatabase.CptaApplication.FactoryClient.ExistNumero(ct_num) == false)
+                {
+                    return 0;
+                }
+                _sageAccess.GetSageDatabase.CptaApplication.FactoryClient.ReadNumero(ct_num).Remove();
+                return 1;
+            }
         }
 
         public Task<IReadOnlyList<Client>> GetAllAsync()
@@ -93,13 +92,48 @@ namespace Infrastructure.Data.Repositories
             throw new NotImplementedException();
         }
 
-        public async Task<Client> GetByIdAsync(string CT_Num)
+        public async Task<Client> GetByIdAsync(string ct_num)
         {
-            throw new NotImplementedException();
+            lock (_sageAccess.DatabaseLock)
+            {
+                Client client = new Client();
+                if (!OpenDatabase())
+                {
+                    return client;
+                }
+                if (_sageAccess.GetSageDatabase.CptaApplication.FactoryClient.ExistNumero(ct_num) == false)
+                {
+                    _sageAccess.GetSageDatabase.Close();
+                    return client;
+                }
+                IBOClient3 sageClient = _sageAccess.GetSageDatabase.CptaApplication.FactoryClient.ReadNumero(ct_num);
+                client = ObjectMapper.IboClientToClient(sageClient);
+                _sageAccess.GetSageDatabase.Close();
+                return client;
+            }
         }
-        public Task<int> UpdateAsync(Client entity)
+
+        public Task<int> UpdateAsync(Client client)
         {
-            throw new NotImplementedException();
+            lock (_sageAccess.DatabaseLock)
+            {
+                if (!OpenDatabase())
+                {
+                    return Task.FromResult(0);
+                }
+                if (_sageAccess.GetSageDatabase.CptaApplication.FactoryClient.ExistNumero(client.CT_Num) == false)
+                {
+                    _sageAccess.GetSageDatabase.Close();
+                    return Task.FromResult(0);
+                }
+
+                IBOClient3 sageClient = _sageAccess.GetSageDatabase.CptaApplication.FactoryClient.ReadNumero(client.CT_Num);
+                sageClient = ObjectMapper.ClientToIboClient(client,sageClient);
+                sageClient.Write();
+
+                _sageAccess.GetSageDatabase.Close();
+                return Task.FromResult(1);
+            }
         }
     }
 }
