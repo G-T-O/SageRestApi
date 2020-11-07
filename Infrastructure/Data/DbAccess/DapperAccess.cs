@@ -11,7 +11,7 @@ namespace Infrastructure.Data.DbAccess
     public DapperAccess(IConfiguration configuration)
         {
             _configuration = configuration;
-            _connectionString = _configuration.GetConnectionString("DefaultConnection");
+            _connectionString = _configuration.GetSection("ConnectionString").GetSection("DefaultConnection").Value;
         }
     }
 }
