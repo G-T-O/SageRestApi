@@ -4,7 +4,6 @@ using Core.Dto;
 using Infrastructure.Data.Mapper;
 using Objets100cLib;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Infrastructure.Data.Repositories

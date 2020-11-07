@@ -5,9 +5,7 @@ using Infrastructure.Data.DbAccess;
 using Infrastructure.Data.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using Application.Interfaces.Services;
-using Core.Dto;
 using Application.Services;
-using Microsoft.Extensions.Configuration;
 
 namespace Infrastructure
 {

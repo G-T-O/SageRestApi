@@ -2,9 +2,7 @@
 using Application.Interfaces.Repositories;
 using Core.Dto;
 using Dapper;
-using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Infrastructure.Data.Repositories

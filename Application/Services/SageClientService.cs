@@ -1,6 +1,4 @@
 ﻿using Application.Interfaces.Services;
-using System;
-using System.Collections.Generic;
 using Core.Dto;
 using System.Threading.Tasks;
 using Application.Interfaces.Sage.Repositories;

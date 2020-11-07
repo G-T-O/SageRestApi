@@ -1,7 +1,6 @@
 ﻿using Application.Interfaces.Sage.Repositories;
 using Core.Dto;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Infrastructure.Data.Repositories

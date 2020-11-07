@@ -1,7 +1,5 @@
 ﻿using Core.Dto;
-using Application.Interfaces.Access;
 using Objets100cLib;
-using System;
 
 namespace Infrastructure.Data.Mapper
 {
