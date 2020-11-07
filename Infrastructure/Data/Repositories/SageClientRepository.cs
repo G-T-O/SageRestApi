@@ -16,28 +16,11 @@ namespace Infrastructure.Data.Repositories
             _sageAccess = sageAccess;
         }
 
-        private bool OpenDatabase()
-        {
-            try
-            {
-                _sageAccess.GetSageDatabase.CompanyServer = _sageAccess.GetDatabaseInstance;
-                _sageAccess.GetSageDatabase.CompanyDatabaseName = _sageAccess.GetDatabaseName;
-                _sageAccess.GetSageDatabase.Loggable.UserName = _sageAccess.GetUsername;
-                _sageAccess.GetSageDatabase.Loggable.UserPwd = _sageAccess.GetUserPwd;
-                _sageAccess.GetSageDatabase.Open();
-                return true;
-            }
-            catch (Exception e)
-            {
-                return false;
-            }
-        }
-
         public async Task<int> AddAsync(Client client)
         {
             lock (_sageAccess.DatabaseLock)
             {
-                if (!OpenDatabase())
+                if (!Utility.ComObject.Open(_sageAccess))
                 {
                     return 1;
                 }
@@ -52,18 +35,18 @@ namespace Infrastructure.Data.Repositories
                     sageClient.WriteDefault();
                     sageClient.Read();
 
-                    _sageAccess.GetSageDatabase.Close();
+                    Utility.ComObject.Close(_sageAccess);
 
                     return int.Parse(sageClient.CT_Num);
                 }
                 catch (Exception ex) when ((ex.Message.Equals("Cet élément est en cours d'utilisation !")))
                 {
-                    _sageAccess.GetSageDatabase.Close();
+                    Utility.ComObject.Close(_sageAccess);
                     return 0;
                 }
                 catch (Exception e)
                 {
-                    _sageAccess.GetSageDatabase.Close();
+                    Utility.ComObject.Close(_sageAccess);
                     return 0;
                 }
             }
@@ -73,15 +56,17 @@ namespace Infrastructure.Data.Repositories
         {
             lock (_sageAccess.DatabaseLock)
             {
-                if (!OpenDatabase())
+                if (!Utility.ComObject.Open(_sageAccess))
                 {
                     return 0;
                 }
                 if (_sageAccess.GetSageDatabase.CptaApplication.FactoryClient.ExistNumero(ct_num) == false)
                 {
+                    Utility.ComObject.Close(_sageAccess);
                     return 0;
                 }
                 _sageAccess.GetSageDatabase.CptaApplication.FactoryClient.ReadNumero(ct_num).Remove();
+                Utility.ComObject.Close(_sageAccess);
                 return 1;
             }
         }
@@ -91,18 +76,18 @@ namespace Infrastructure.Data.Repositories
             lock (_sageAccess.DatabaseLock)
             {
                 Client client = new Client();
-                if (!OpenDatabase())
+                if (!Utility.ComObject.Open(_sageAccess))
                 {
                     return client;
                 }
                 if (_sageAccess.GetSageDatabase.CptaApplication.FactoryClient.ExistNumero(ct_num) == false)
                 {
-                    _sageAccess.GetSageDatabase.Close();
+                    Utility.ComObject.Close(_sageAccess);
                     return client;
                 }
                 IBOClient3 sageClient = _sageAccess.GetSageDatabase.CptaApplication.FactoryClient.ReadNumero(ct_num);
                 client = ObjectMapper.IboClientToClient(sageClient);
-                _sageAccess.GetSageDatabase.Close();
+                Utility.ComObject.Close(_sageAccess);
                 return client;
             }
         }
@@ -111,13 +96,13 @@ namespace Infrastructure.Data.Repositories
         {
             lock (_sageAccess.DatabaseLock)
             {
-                if (!OpenDatabase())
+                if (!Utility.ComObject.Open(_sageAccess))
                 {
                     return Task.FromResult(0);
                 }
                 if (_sageAccess.GetSageDatabase.CptaApplication.FactoryClient.ExistNumero(client.CT_Num) == false)
                 {
-                    _sageAccess.GetSageDatabase.Close();
+                    Utility.ComObject.Close(_sageAccess);
                     return Task.FromResult(0);
                 }
 
@@ -125,7 +110,7 @@ namespace Infrastructure.Data.Repositories
                 sageClient = ObjectMapper.ClientToIboClient(client,sageClient);
                 sageClient.Write();
 
-                _sageAccess.GetSageDatabase.Close();
+                Utility.ComObject.Close(_sageAccess);
                 return Task.FromResult(1);
             }
         }
