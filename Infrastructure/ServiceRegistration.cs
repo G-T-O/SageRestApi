@@ -20,9 +20,11 @@ namespace Infrastructure
             services.AddTransient<ISageClientRepository, SageClientRepository>();
             services.AddTransient<ISageInvoiceRepository, SageInvoiceRepository>();
             services.AddTransient<ISageOrderRepository, SageOrderRepository>();
+            services.AddTransient<ISageOrderRepository, SageOrderRepository>();
 
             services.AddTransient<ISageClientService, SageClientService>();
             services.AddTransient<IClientService, ClientService>();
+            services.AddTransient<ISageOrderService, SageOrderService>();
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System.Threading.Tasks;
+using Application.Interfaces.Services;
+using Core.Dto;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -9,36 +11,31 @@ namespace SageRestApi.Controllers
     [ApiController]
     public class OrdersController : ControllerBase
     {
-        // GET: api/<OrdersController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        private ISageOrderService _sageOrderService;
+        public OrdersController(ISageOrderService sageOrderService)
         {
-            return new string[] { "value1", "value2" };
+            _sageOrderService = sageOrderService;
         }
 
-        // GET api/<OrdersController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/<OrdersController>
+        // POST api/<ClientsController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> AddClient(Order order)
         {
+            return Ok(await _sageOrderService.AddAsync(order));
         }
 
-        // PUT api/<OrdersController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        // PUT api/<ClientsController>/5
+        [HttpPut]
+        public async Task<IActionResult> Put(Order order)
         {
+            return Ok(await _sageOrderService.UpdateAsync(order));
         }
 
-        // DELETE api/<OrdersController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        // DELETE api/<ClientsController>/5
+        [HttpDelete("{ct_Num}")]
+        public async Task<IActionResult> Delete(string orderNum)
         {
+            return Ok(await _sageOrderService.DeleteAsync(orderNum));
         }
     }
 }
