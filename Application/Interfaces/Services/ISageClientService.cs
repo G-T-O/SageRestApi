@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Core.Dto;
 using System.Threading.Tasks;
 
 namespace Application.Interfaces.Services
 {
-   public interface ISageClientService <T> where T : class
+   public interface ISageClientService
     {
-        Task<T> GetByIdAsync(string id);
-        Task<IReadOnlyList<T>> GetAllAsync();
-        Task<int> AddAsync(T entity);
-        Task<int> UpdateAsync(T entity);
+        Task<Client> GetByIdAsync(string id);
+        Task<int> AddAsync(Client client);
+        Task<int> UpdateAsync(Client client);
         Task<int> DeleteAsync(string id);
     }
 }

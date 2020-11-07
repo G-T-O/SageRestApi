@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Application.Services
 {
-    public class ClientService : IClientService<Client>
+    public class ClientService : IClientService
     {
         private readonly IClientRepository _clientRepository;
 
@@ -16,24 +16,24 @@ namespace Application.Services
             _clientRepository = clientRepository;
         }
 
-        public Task<int> AddAsync(Client entity)
+        public async Task<int> AddAsync(Client client)
         {
-            throw new NotImplementedException();
+            return await _clientRepository.AddAsync(client);
         } 
 
-        public Task<int> DeleteAsync(string id)
+        public async Task<int> DeleteAsync(string id)
         {
-            throw new NotImplementedException();
+            return await _clientRepository.DeleteAsync(id);
         }
 
-        public Task<Client> GetByIdAsync(string id)
+        public async Task<Client> GetByIdAsync(string id)
         {
-            throw new NotImplementedException();
+           return await _clientRepository.GetByIdAsync(id);
         }
 
-        public Task<int> UpdateAsync(Client entity)
+        public async Task<int> UpdateAsync(Client client)
         {
-            throw new NotImplementedException();
+            return await _clientRepository.UpdateAsync(client);
         }
     }
 }

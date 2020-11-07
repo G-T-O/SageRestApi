@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using Core.Dto;
 using System.Threading.Tasks;
 
 namespace Application.Interfaces.Services
 {
-    public interface IClientService <T> where T : class
+    public interface IClientService
     {
-        Task<T> GetByIdAsync(string id);
-        Task<int> AddAsync(T entity);
-        Task<int> UpdateAsync(T entity);
+        Task<Client> GetByIdAsync(string id);
+        Task<int> AddAsync(Client entity);
+        Task<int> UpdateAsync(Client entity);
         Task<int> DeleteAsync(string id);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Application.Interfaces.Sage.Repositories;
+using Application.Interfaces.Services;
 using Core.Dto;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,10 +12,10 @@ namespace SageRestApi.Controllers
     [ApiController]
     public class SageClientsController : ControllerBase
     {
-        private readonly ISageClientRepository _client;
-        public SageClientsController(ISageClientRepository client)
+        private readonly ISageClientService _sageClientService;
+        public SageClientsController(ISageClientService sageClientService)
         {
-            _client = client;
+            _sageClientService = sageClientService;
         }
         // GET: api/<ClientsController>
         [HttpGet]
@@ -23,28 +24,28 @@ namespace SageRestApi.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Client>> Get(string id)
         {
-            return await _client.GetByIdAsync(id);
+            return await _sageClientService.GetByIdAsync(id);
         }
 
         // POST api/<ClientsController>
         [HttpPost]
         public async Task<IActionResult> AddClient(Client client)
         {
-            return Ok(await _client.AddAsync(client));
+            return Ok(await _sageClientService.AddAsync(client));
         }
 
         // PUT api/<ClientsController>/5
         [HttpPut]
         public async Task<IActionResult> Put(Client client)
         {
-            return Ok(await _client.UpdateAsync(client));
+            return Ok(await _sageClientService.UpdateAsync(client));
         }
 
         // DELETE api/<ClientsController>/5
         [HttpDelete("{ct_Num}")]
         public async Task<IActionResult> Delete(string ct_Num)
         {
-            return Ok(await _client.DeleteAsync(ct_Num));
+            return Ok(await _sageClientService.DeleteAsync(ct_Num));
         }
     }
 }

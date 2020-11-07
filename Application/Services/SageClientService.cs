@@ -7,7 +7,7 @@ using Application.Interfaces.Sage.Repositories;
 
 namespace Application.Services
 {
-    public class SageClientService : ISageClientService<Client>
+    public class SageClientService : ISageClientService
     {
         private readonly ISageClientRepository _sageClientRepository;
 
@@ -16,19 +16,14 @@ namespace Application.Services
             _sageClientRepository = sageClientRepository;
         }
 
-        public Task<int> AddAsync(Client entity)
+        public async Task<int> AddAsync(Client client)
         {
-            throw new NotImplementedException();
+            return await _sageClientRepository.AddAsync(client);
         }
 
-        public Task<int> DeleteAsync(string id)
+        public async Task<int> DeleteAsync(string id)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<IReadOnlyList<Client>> GetAllAsync()
-        {
-            throw new NotImplementedException();
+            return await _sageClientRepository.DeleteAsync(id);
         }
 
         public async Task<Client> GetByIdAsync(string id)
@@ -36,9 +31,9 @@ namespace Application.Services
            return await _sageClientRepository.GetByIdAsync(id);
         }
 
-        public Task<int> UpdateAsync(Client entity)
+        public async Task<int> UpdateAsync(Client client)
         {
-            throw new NotImplementedException();
+            return await _sageClientRepository.UpdateAsync(client);
         }
     }
 }

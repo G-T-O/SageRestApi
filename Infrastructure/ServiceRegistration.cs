@@ -4,6 +4,10 @@ using Application.Interfaces.Repositories;
 using Infrastructure.Data.DbAccess;
 using Infrastructure.Data.Repositories;
 using Microsoft.Extensions.DependencyInjection;
+using Application.Interfaces.Services;
+using Core.Dto;
+using Application.Services;
+using Microsoft.Extensions.Configuration;
 
 namespace Infrastructure
 {
@@ -18,6 +22,9 @@ namespace Infrastructure
             services.AddTransient<ISageClientRepository, SageClientRepository>();
             services.AddTransient<ISageInvoiceRepository, SageInvoiceRepository>();
             services.AddTransient<ISageOrderRepository, SageOrderRepository>();
+
+            services.AddTransient<ISageClientService, SageClientService>();
+            services.AddTransient<IClientService, ClientService>();
         }
     }
 }
