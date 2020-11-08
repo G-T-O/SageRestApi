@@ -1,5 +1,6 @@
 ﻿using Core.Dto;
 using Objets100cLib;
+using System;
 
 namespace Infrastructure.Data.Mapper
 {
@@ -59,6 +60,36 @@ namespace Infrastructure.Data.Mapper
             client.Pays = sageClient.Adresse.Pays;
             client.CT_Identifiant = sageClient.CT_Identifiant;
             return client;
+        }
+
+        public static Order IboOrderToOrder(IBODocumentVente3 orderHeader)
+        {
+            Order sageOrder = new Order();
+            try
+            {
+                sageOrder.DO_Piece = orderHeader.DO_Piece;
+                sageOrder.DO_Ref = orderHeader.DO_Ref;
+                sageOrder.DO_Statut = orderHeader.DO_Statut.ToString();
+                sageOrder.DO_Tiers = orderHeader.Tiers.CT_Num;
+                sageOrder.CT_NumPayeur = orderHeader.TiersPayeur.CT_Num;
+                sageOrder.DO_Date = orderHeader.DO_Date;
+                sageOrder.DO_DateLivr = orderHeader.DO_DateLivr;
+                sageOrder.DO_TotalHT = Convert.ToDecimal(orderHeader.DO_TotalHT);
+                sageOrder.DO_TotalHTNet = Convert.ToDecimal(orderHeader.DO_TotalHTNet);
+                sageOrder.DO_TotalTTC = Convert.ToDecimal(orderHeader.DO_TotalTTC);
+                sageOrder.DO_NetAPayer = Convert.ToDecimal(orderHeader.DO_NetAPayer);
+                sageOrder.DO_MontantRegle = Convert.ToDecimal(orderHeader.DO_MontantRegle);
+
+                foreach (Article article in orderHeader.FactoryDocumentLigne.List)
+                {
+                    sageOrder.Articles.Add(article);
+                }
+                return sageOrder;
+            }
+            catch(Exception e)
+            {
+                return sageOrder;
+            }
         }
     }
 }
