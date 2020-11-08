@@ -1,14 +1,24 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Core.Dto
 {
     public class Order
     {
         private List<Article> _articles;
-        public string CT_Num { get; set; }
-        public string OrderNum { get; set; }
-        public string QualCode { get; set; }
-        public string DO_Date { get; set; }
+
+        public string DO_Ref { get; set; }
+        public string DO_Tiers { get; set; }
+        public string CT_NumPayeur { get; set; }
+        public string DO_Piece { get; set; }
+        public string DO_Statut { get; set; }
+        public DateTime DO_Date { get; set; }
+        public DateTime DO_DateLivr { get; set; }
+        public decimal DO_TotalHT { get; set; }
+        public decimal DO_TotalHTNet { get; set; }
+        public decimal DO_TotalTTC { get; set; }
+        public decimal DO_NetAPayer { get; set; }
+        public decimal DO_MontantRegle{ get; set; }
         public List<Article> Articles
         {
             set { _articles = value; }
