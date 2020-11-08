@@ -20,7 +20,7 @@ namespace Infrastructure.Data.Repositories
         {
             lock (_sageAccess.DatabaseLock)
             {
-                if (!Utility.ComObject.Open(_sageAccess))
+                if (Utility.ComObject.Open(_sageAccess) == false)
                 {
                     return 1;
                 }
@@ -56,7 +56,7 @@ namespace Infrastructure.Data.Repositories
         {
             lock (_sageAccess.DatabaseLock)
             {
-                if (!Utility.ComObject.Open(_sageAccess))
+                if (Utility.ComObject.Open(_sageAccess) == false)
                 {
                     return 0;
                 }
@@ -76,7 +76,7 @@ namespace Infrastructure.Data.Repositories
             lock (_sageAccess.DatabaseLock)
             {
                 Client client = new Client();
-                if (!Utility.ComObject.Open(_sageAccess))
+                if (Utility.ComObject.Open(_sageAccess) == false)
                 {
                     return client;
                 }
@@ -96,7 +96,7 @@ namespace Infrastructure.Data.Repositories
         {
             lock (_sageAccess.DatabaseLock)
             {
-                if (!Utility.ComObject.Open(_sageAccess))
+                if (Utility.ComObject.Open(_sageAccess) == false)
                 {
                     return Task.FromResult(0);
                 }
