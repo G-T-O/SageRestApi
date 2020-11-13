@@ -16,8 +16,6 @@ namespace SageRestApi.Controllers
         {
             _sageClientService = sageClientService;
         }
-        // GET: api/<ClientsController>
-        [HttpGet]
 
         // GET api/<ClientsController>/5
         [HttpGet("{id}")]
