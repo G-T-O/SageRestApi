@@ -21,6 +21,7 @@ namespace Infrastructure.Data.Repositories
             {
                 if (Utility.ComObject.Open(_sageAccess) == false)
                 {
+                        Utility.ComObject.Close(_sageAccess);
                     return  1;
                 }
                 IBODocumentVente3 orderHeader = _sageAccess.GetSageDatabase.FactoryDocumentVente.CreateType(DocumentType.DocumentTypeVenteCommande);
@@ -38,12 +39,12 @@ namespace Infrastructure.Data.Repositories
                     orderHeader.CouldModified();
                     orderHeader.Write();
 
-                    foreach (var article in order.Articles)
+                    foreach (DocLine docLine in order.DocLines)
                     {
-                        if (_sageAccess.GetSageDatabase.FactoryArticle.ExistReference(article.ArticleCode))
+                        if (_sageAccess.GetSageDatabase.FactoryArticle.ExistReference(docLine.AR_Ref))
                         {
                             orderLines = (IBODocumentVenteLigne3)orderHeader.FactoryDocumentLigne.Create();
-                            orderLines.SetDefaultArticle(_sageAccess.GetSageDatabase.FactoryArticle.ReadReference(article.ArticleCode), article.ArticleQte);
+                            orderLines.SetDefaultArticle(_sageAccess.GetSageDatabase.FactoryArticle.ReadReference(docLine.AR_Ref), docLine.DL_Qte);
                             orderLines.WriteDefault();
                         }
                         else
@@ -51,10 +52,12 @@ namespace Infrastructure.Data.Repositories
                            //Log
                         }
                     }
+                    Utility.ComObject.Close(_sageAccess);
                     return 0;
                 }
                 catch (Exception e)
                 {
+                        Utility.ComObject.Close(_sageAccess);
                     return 1;
                 }
             }
@@ -76,11 +79,18 @@ namespace Infrastructure.Data.Repositories
                 IBODocumentVente3 docEntete = _sageAccess.GetSageDatabase.FactoryDocumentVente.ReadPiece(DocumentType.DocumentTypeVenteCommande,id);
                 try
                 {
+                    foreach(IBODocumentLigne3 line in docEntete.FactoryDocumentLigne.List)
+                    {
+                        line.Remove();
+                    }
                     docEntete.Remove();
+
+                    Utility.ComObject.Close(_sageAccess);
                     return 0;
                 }
                 catch (Exception e)
                 {
+                    Utility.ComObject.Close(_sageAccess);
                     return 1;
                 }
             }
@@ -101,14 +111,16 @@ namespace Infrastructure.Data.Repositories
                     return sageOrder;
                 }
                 IBODocumentVente3 orderHeader = _sageAccess.GetSageDatabase.FactoryDocumentVente.ReadPiece(DocumentType.DocumentTypeVenteCommande, id);
-                
+               
                 try
                 {
                     sageOrder = ObjectMapper.IboOrderToOrder(orderHeader);
+                    Utility.ComObject.Close(_sageAccess);
                     return sageOrder;
                 }
                 catch (Exception e)
                 {
+                    Utility.ComObject.Close(_sageAccess);
                     return sageOrder;
                 }
             }
