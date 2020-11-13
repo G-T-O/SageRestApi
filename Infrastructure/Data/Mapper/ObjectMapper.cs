@@ -80,14 +80,30 @@ namespace Infrastructure.Data.Mapper
                 sageOrder.DO_NetAPayer = Convert.ToDecimal(orderHeader.DO_NetAPayer);
                 sageOrder.DO_MontantRegle = Convert.ToDecimal(orderHeader.DO_MontantRegle);
 
-                foreach (Article article in orderHeader.FactoryDocumentLigne.List)
+                foreach (IBODocumentVenteLigne3 orderLine in orderHeader.FactoryDocumentLigne.List)
                 {
-                    sageOrder.Articles.Add(article);
+                    DocLine docLine = new DocLine();
+                    docLine.AR_Ref = orderLine.Article.AR_Ref;
+                    docLine.DL_Design = orderLine.DL_Design;
+                    docLine.DL_MontantHT = Convert.ToDecimal(orderLine.DL_MontantHT);
+                    docLine.DL_MontantTTC = Convert.ToDecimal(orderLine.DL_MontantTTC);
+                    docLine.DL_PrixUnitaire = Convert.ToDecimal(orderLine.DL_PrixUnitaire);
+                    docLine.DL_PUTTC = Convert.ToDecimal(orderLine.DL_PUTTC);
+                    docLine.DL_Qte = orderLine.DL_Qte;
+                    //docLine.DL_Taxe1 = orderLine.Taxe.TA_GrilleTaxe.1
+                    //docLine.DL_TypeTaxe1 = orderLine.Taxe.TA_Type;
+                    docLine.DO_Date = orderLine.DO_Date;
+                    docLine.DO_Domaine = Convert.ToByte(orderLine.DO_Domaine);
+                    docLine.DO_Piece = orderLine.DL_PieceBC;
+                    docLine.DO_Type = Convert.ToByte(orderLine.DO_Type);
+
+                    sageOrder.DocLines.Add(docLine);
                 }
                 return sageOrder;
             }
             catch(Exception e)
             {
+
                 return sageOrder;
             }
         }
