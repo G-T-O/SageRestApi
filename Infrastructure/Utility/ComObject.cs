@@ -23,12 +23,14 @@ namespace Infrastructure.Utility
                 return false;
             }
         }
-
         public static bool Close(ISageAccess sageAccess)
         {
             try
             {
-                sageAccess.GetSageDatabase.Close();
+                if (sageAccess.GetSageDatabase.IsOpen)
+                {
+                    sageAccess.GetSageDatabase.Close();
+                }
                 return true;
             }catch(Exception e)
             {
