@@ -9,30 +9,33 @@ namespace SageRestApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class OrdersController : ControllerBase
+    public class SageOrdersController : ControllerBase
     {
-        private ISageOrderService _sageOrderService;
-        public OrdersController(ISageOrderService sageOrderService)
+        private readonly ISageOrderService _sageOrderService;
+        public SageOrdersController(ISageOrderService sageOrderService)
         {
             _sageOrderService = sageOrderService;
         }
 
-        // POST api/<ClientsController>
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Order>> Get(string id)
+        {
+            return await _sageOrderService.GetByIdAsync(id);
+        }
         [HttpPost]
-        public async Task<IActionResult> AddClient(Order order)
+        public async Task<IActionResult> AddOrder(Order order)
         {
             return Ok(await _sageOrderService.AddAsync(order));
         }
 
-        // PUT api/<ClientsController>/5
         [HttpPut]
         public async Task<IActionResult> Put(Order order)
         {
             return Ok(await _sageOrderService.UpdateAsync(order));
         }
 
-        // DELETE api/<ClientsController>/5
-        [HttpDelete("{ct_Num}")]
+        [HttpDelete("{orderNum}")]
         public async Task<IActionResult> Delete(string orderNum)
         {
             return Ok(await _sageOrderService.DeleteAsync(orderNum));
