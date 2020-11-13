@@ -5,7 +5,7 @@ namespace Core.Dto
 {
     public class Order
     {
-        private List<Article> _articles;
+        private List<DocLine> _docLines = new List<DocLine>();
 
         public string DO_Ref { get; set; }
         public string DO_Tiers { get; set; }
@@ -19,10 +19,10 @@ namespace Core.Dto
         public decimal DO_TotalTTC { get; set; }
         public decimal DO_NetAPayer { get; set; }
         public decimal DO_MontantRegle{ get; set; }
-        public List<Article> Articles
+        public List<DocLine> DocLines
         {
-            set { _articles = value; }
-            get { return _articles; }
+            set { _docLines = value; }
+            get { return _docLines; }
         }
     }
 }
