@@ -21,7 +21,6 @@ namespace Core.Dto
         public string CodePostal { get; set; }
         public string Ville { get; set; }
         public string Pays { get; set; }
-
         public string Activated { get; set; } = "True";
     }
 }
