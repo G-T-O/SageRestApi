@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
 using Core.Dto;
 using Microsoft.AspNetCore.Mvc;
