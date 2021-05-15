@@ -20,10 +20,10 @@ namespace SageRestApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors(options => options.AddPolicy("ApiCorsPolicy", builder =>
+/*            services.AddCors(options => options.AddPolicy("ApiCorsPolicy", builder =>
             {
                 builder.WithOrigins("http://localhost:4200").AllowAnyMethod().AllowAnyHeader();
-            }));
+            }));*/
             services.AddControllers();
 
             services.AddInfrastructure();
@@ -45,15 +45,10 @@ namespace SageRestApi
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            app.UseCors("ApiCorsPolicy");
-
+//           app.UseCors("ApiCorsPolicy");
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

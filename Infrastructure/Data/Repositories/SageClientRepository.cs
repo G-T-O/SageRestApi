@@ -1,5 +1,5 @@
-﻿using Application.Interfaces.Access;
-using Application.Interfaces.Sage.Repositories;
+﻿using Infrastructure.Data.IDBAccess;
+using Infrastructure.IRepositories.Sage;
 using Core.Dto;
 using Infrastructure.Data.Mapper;
 using Objets100cLib;

@@ -1,19 +1,19 @@
-﻿using Application.Interfaces.Access;
-using Application.Interfaces.Sage.Repositories;
-using Application.Interfaces.Repositories;
+﻿using Infrastructure.Data.IDBAccess;
 using Infrastructure.Data.DbAccess;
 using Infrastructure.Data.Repositories;
 using Microsoft.Extensions.DependencyInjection;
-using Application.Interfaces.Services;
+using Infrastructure.IRepositories.Dapper;
+using Infrastructure.IRepositories.Sage;
+using Application.IServices;
 using Application.Services;
 
-namespace Infrastructure
+namespace SageRestApi
 {
     public static class ServiceRegistration
     {
         public static void AddInfrastructure(this IServiceCollection services)
         {
-            services.AddTransient<IDapperAccess, DapperAccess>();
+            services.AddTransient<ISQLDataAccess, SQLDataAccess>();
             services.AddTransient<ISageAccess, SageAccess>();
 
             services.AddTransient<IClientRepository, ClientRepository>();

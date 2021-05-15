@@ -1,7 +1,6 @@
-﻿using Application.Interfaces.Services;
+﻿using Application.IServices;
 using Core.Dto;
 using System.Threading.Tasks;
-using Application.Interfaces.Sage.Repositories;
 
 namespace Application.Services
 {

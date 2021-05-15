@@ -1,5 +1,4 @@
-﻿using Application.Interfaces.Repositories;
-using Application.Interfaces.Services;
+﻿using Application.IServices;
 using Core.Dto;
 using System.Threading.Tasks;
 

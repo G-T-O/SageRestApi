@@ -1,4 +1,4 @@
-﻿using Application.Interfaces.Access;
+﻿using Infrastructure.Data.IDBAccess;
 using System;
 using System.Collections.Generic;
 using System.Text;

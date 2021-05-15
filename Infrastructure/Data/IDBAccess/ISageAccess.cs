@@ -1,6 +1,6 @@
 ﻿using Objets100cLib;
 
-namespace Application.Interfaces.Access
+namespace Infrastructure.Data.IDBAccess
 {
     public interface ISageAccess
     {

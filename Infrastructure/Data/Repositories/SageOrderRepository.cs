@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Application.Interfaces.Access;
-using Application.Interfaces.Sage.Repositories;
+using Infrastructure.Data.IDBAccess;
 using Core.Dto;
 using Infrastructure.Data.Mapper;
 using Objets100cLib;
+using Infrastructure.IRepositories.Sage;
 
 namespace Infrastructure.Data.Repositories
 {

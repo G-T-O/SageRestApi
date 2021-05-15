@@ -1,4 +1,4 @@
-﻿using Application.Interfaces.Access;
+﻿using Infrastructure.Data.IDBAccess;
 using Application.Interfaces.Repositories;
 using Core.Dto;
 using Dapper;
@@ -9,8 +9,8 @@ namespace Infrastructure.Data.Repositories
 {
     public class ClientRepository : IClientRepository
     {
-        private readonly IDapperAccess _dapperAccess;
-        public ClientRepository(IDapperAccess dapperAccess)
+        private readonly ISQLDataAccess _dapperAccess;
+        public ClientRepository(ISQLDataAccess dapperAccess)
         {
             _dapperAccess = dapperAccess;
         }

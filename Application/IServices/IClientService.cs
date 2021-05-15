@@ -1,7 +1,7 @@
 ﻿using Core.Dto;
 using System.Threading.Tasks;
 
-namespace Application.Interfaces.Services
+namespace Application.IServices
 {
     public interface IClientService
     {
