@@ -1,9 +1,9 @@
 ﻿using Infrastructure.Data.IDBAccess;
-using Application.Interfaces.Repositories;
 using Core.Dto;
 using Dapper;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
+using Infrastructure.IRepositories.SQL;
 
 namespace Infrastructure.Data.Repositories
 {

@@ -1,6 +1,6 @@
 ﻿using Core.Dto;
 
-namespace Infrastructure.IRepositories.Dapper
+namespace Infrastructure.IRepositories.SQL
 {
     public interface IClientRepository : IGenericRepository<Client>
     {

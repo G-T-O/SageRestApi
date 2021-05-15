@@ -20,12 +20,7 @@ namespace SageRestApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-/*            services.AddCors(options => options.AddPolicy("ApiCorsPolicy", builder =>
-            {
-                builder.WithOrigins("http://localhost:4200").AllowAnyMethod().AllowAnyHeader();
-            }));*/
             services.AddControllers();
-
             services.AddInfrastructure();
             services.AddSwaggerGen();
         }
@@ -34,18 +29,8 @@ namespace SageRestApi
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseSwagger();
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Sage web API V1.1");
-                c.DisplayRequestDuration();
-                c.RoutePrefix = string.Empty;
-            });
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Sage web API V1.1"));
 
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-//           app.UseCors("ApiCorsPolicy");
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthorization();

@@ -1,5 +1,5 @@
-﻿using Application.Interfaces.Sage.Repositories;
-using Core.Dto;
+﻿using Core.Dto;
+using Infrastructure.IRepositories.Sage;
 using System;
 using System.Threading.Tasks;
 
