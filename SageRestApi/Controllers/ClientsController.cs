@@ -1,7 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Net.Mime;
+using System.Threading.Tasks;
 using Application.IServices;
 using Core.Dto;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace SageRestApi.Controllers
 {
@@ -15,13 +19,6 @@ namespace SageRestApi.Controllers
             _clientService = client;
         }
 
-        // GET api/<ClientsController>/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Client>> Get(string id)
-        {
-            
-            return await _clientService.GetByIdAsync(id);
-        }
 
         // POST api/<ClientsController>
         [HttpPost]
