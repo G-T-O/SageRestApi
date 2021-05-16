@@ -1,7 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System.Net.Mime;
+using System.Threading.Tasks;
 using Application.IServices;
 using Core.Dto;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -16,29 +19,38 @@ namespace SageRestApi.Controllers
         {
             _sageOrderService = sageOrderService;
         }
-
-
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Order>> Get(string id)
-        {
-            return await _sageOrderService.GetByIdAsync(id);
-        }
+        /// <summary>
+        /// Create an order
+        /// </summary>
+        /// <response code="200">Success while creating the order</response>
+        /// <response code="400">Error while creating the order</response>
+        /// <response code="401">Bad credentials</response>
+        /// <response code="500">Internal server error</response>
+        [SwaggerOperation(Tags = new[] { "Order" })]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)] // add model API error
+        [Produces(MediaTypeNames.Application.Json)]
         [HttpPost]
-        public async Task<IActionResult> AddOrder(Order order)
+        public async Task<IActionResult> CreateOrder(Order order)
         {
-            return Ok(await _sageOrderService.AddAsync(order));
+            return Ok(await _sageOrderService.Create(order));
         }
 
-        [HttpPut]
-        public async Task<IActionResult> Put(Order order)
-        {
-            return Ok(await _sageOrderService.UpdateAsync(order));
-        }
-
+        /// <summary>
+        /// Delete an order from an ID
+        /// </summary>
+        /// <response code="200">Success while deleting the order</response>
+        /// <response code="400">Error while deleting the order</response>
+        /// <response code="401">Bad credentials</response>
+        /// <response code="500">Internal server error</response>
+        [SwaggerOperation(Tags = new[] { "Order" })]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)] // add model API error
+        [Produces(MediaTypeNames.Application.Json)]
         [HttpDelete("{orderNum}")]
-        public async Task<IActionResult> Delete(string orderNum)
+        public async Task<IActionResult> DeleteOrder(string orderNum)
         {
-            return Ok(await _sageOrderService.DeleteAsync(orderNum));
+            return Ok(await _sageOrderService.Delete(orderNum));
         }
     }
 }

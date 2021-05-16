@@ -44,7 +44,6 @@ namespace SageRestApi
             services.AddTransient<ISageInvoiceRepository, SageInvoiceRepository>();
             services.AddTransient<ISageOrderRepository, SageOrderRepository>();
 
-            services.AddTransient<ISageClientService, SageClientService>();
             services.AddTransient<IClientService, ClientService>();
             services.AddTransient<ISageOrderService, SageOrderService>();
         }

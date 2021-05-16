@@ -14,11 +14,9 @@ namespace SageRestApi.Controllers
     public class ClientsController : ControllerBase
     {
         private readonly IClientService _clientService;
-        private readonly ISageClientService _sageClientService;
-        public ClientsController(IClientService client,ISageClientService sageClientService)
+        public ClientsController(IClientService client)
         {
             _clientService = client;
-            _sageClientService = sageClientService;
         }
 
         /// <summary>
@@ -28,12 +26,12 @@ namespace SageRestApi.Controllers
         /// <response code="400">Error while retrieving the client</response>
         /// <response code="401">Bad credentials</response>
         /// <response code="500">Internal server error</response>
-        [SwaggerOperation(Tags = new[] { "Informations clients" })]
+        [SwaggerOperation(Tags = new[] { "Informations client" })]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Client))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)] // add model API error
         [Produces(MediaTypeNames.Application.Json)]
         [HttpGet]
-        public async Task<ActionResult<Client>> Get([Required] string sageCode)
+        public async Task<ActionResult<Client>> GetClient([Required] string sageCode)
         {
             return await _clientService.GetByIdAsync(sageCode);
         }
@@ -45,21 +43,31 @@ namespace SageRestApi.Controllers
         /// <response code="400">Error while creating the client</response>
         /// <response code="401">Bad credentials</response>
         /// <response code="500">Internal server error</response>
-        [SwaggerOperation(Tags = new[] { "Create a new client" })]
+        [SwaggerOperation(Tags = new[] { "Informations client" })]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Client))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)] // add model API error
         [Produces(MediaTypeNames.Application.Json)]
         [HttpPost]
-        public async Task<IActionResult> AddClient(Client client)
+        public async Task<IActionResult> CreateClient(Client client)
         {
-            return Ok(await _clientService.AddAsync(client));
+            return Ok(_clientService.Create(client));
         }
 
-        // PUT api/<ClientsController>/5
+        /// <summary>
+        /// Update a client
+        /// </summary>
+        /// <response code="200">Success while updating the client</response>
+        /// <response code="400">Error while updating the client</response>
+        /// <response code="401">Bad credentials</response>
+        /// <response code="500">Internal server error</response>
+        [SwaggerOperation(Tags = new[] { "Informations client" })]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)] // add model API error
+        [Produces(MediaTypeNames.Application.Json)]
         [HttpPut]
-        public async Task<IActionResult> PutClient(Client client)
+        public async Task<IActionResult> UpdateOrder(Client client)
         {
-            return Ok(await _clientService.UpdateAsync(client));
+            return Ok(_clientService.Update(client));
         }
 
         /// <summary>
@@ -69,15 +77,14 @@ namespace SageRestApi.Controllers
         /// <response code="400">Error while deleting the client</response>
         /// <response code="401">Bad credentials</response>
         /// <response code="500">Internal server error</response>
-        [SwaggerOperation(Tags = new[] { "Delete a client" })]
+        [SwaggerOperation(Tags = new[] { "Informations client" })]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Client))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)] // add model API error
         [Produces(MediaTypeNames.Application.Json)]
-        [HttpPost]
         [HttpDelete("{ct_Num}")]
         public async Task<IActionResult> DeleteClient(string ct_Num)
         {
-            return Ok(await _clientService.DeleteAsync(ct_Num));
+            return Ok(_clientService.Delete(ct_Num));
         }
     }
 }
