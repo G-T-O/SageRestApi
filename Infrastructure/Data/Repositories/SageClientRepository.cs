@@ -16,13 +16,13 @@ namespace Infrastructure.Data.Repositories
             _sageAccess = sageAccess;
         }
 
-        public async Task<int> AddAsync(Client client)
+        public Task<string> Create(Client client)
         {
             lock (_sageAccess.DatabaseLock)
             {
                 if (Utility.ComObject.Open(_sageAccess) == false)
                 {
-                    return 1;
+                    return null;
                 }
 
                 try
@@ -37,62 +37,41 @@ namespace Infrastructure.Data.Repositories
 
                     Utility.ComObject.Close(_sageAccess);
 
-                    return int.Parse(sageClient.CT_Num);
+                    return Task.FromResult(sageClient.CT_Num);
                 }
                 catch (Exception ex) when ((ex.Message.Equals("Cet élément est en cours d'utilisation !")))
                 {
                     Utility.ComObject.Close(_sageAccess);
-                    return 0;
+                    return null;
                 }
                 catch (Exception e)
                 {
                     Utility.ComObject.Close(_sageAccess);
-                    return 0;
+                    return null;
                 }
             }
         }
 
-        public async Task<int> DeleteAsync(string ct_num)
+        public Task<int> Delete(string ct_num)
         {
             lock (_sageAccess.DatabaseLock)
             {
                 if (Utility.ComObject.Open(_sageAccess) == false)
                 {
-                    return 0;
+                    return Task.FromResult(0);
                 }
                 if (_sageAccess.GetSageDatabase.CptaApplication.FactoryClient.ExistNumero(ct_num) == false)
                 {
                     Utility.ComObject.Close(_sageAccess);
-                    return 0;
+                    return Task.FromResult(0);
                 }
                 _sageAccess.GetSageDatabase.CptaApplication.FactoryClient.ReadNumero(ct_num).Remove();
                 Utility.ComObject.Close(_sageAccess);
-                return 1;
+                return Task.FromResult(1);
             }
         }
 
-        public async Task<Client> GetByIdAsync(string ct_num)
-        {
-            lock (_sageAccess.DatabaseLock)
-            {
-                Client client = new Client();
-                if (Utility.ComObject.Open(_sageAccess) == false)
-                {
-                    return client;
-                }
-                if (_sageAccess.GetSageDatabase.CptaApplication.FactoryClient.ExistNumero(ct_num) == false)
-                {
-                    Utility.ComObject.Close(_sageAccess);
-                    return client;
-                }
-                IBOClient3 sageClient = _sageAccess.GetSageDatabase.CptaApplication.FactoryClient.ReadNumero(ct_num);
-                client = ObjectMapper.IboClientToClient(sageClient);
-                Utility.ComObject.Close(_sageAccess);
-                return client;
-            }
-        }
-
-        public Task<int> UpdateAsync(Client client)
+        public Task<int> Update(Client client)
         {
             lock (_sageAccess.DatabaseLock)
             {
