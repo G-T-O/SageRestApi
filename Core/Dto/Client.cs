@@ -12,7 +12,7 @@
         public string Telephone { get; set; }
         public string CT_Identifiant { get; set; }
         public int Civ { get; set; }
-        public string Adresse { get; set; }
+        public Address MainAddress { get; set; } = new Address();
         public string Complement { get; set; }
         public string CodePostal { get; set; }
         public string Ville { get; set; }

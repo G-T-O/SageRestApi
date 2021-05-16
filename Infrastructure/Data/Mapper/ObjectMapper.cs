@@ -14,11 +14,11 @@ namespace Infrastructure.Data.Mapper
             sageClient.Telecom.Portable = client.Portable;
             sageClient.Telecom.Telecopie = client.Telecopie;
             sageClient.Telecom.Telephone = client.Telephone;
-            sageClient.Adresse.Adresse = client.Adresse;
-            sageClient.Adresse.Complement = client.Complement;
-            sageClient.Adresse.CodePostal = client.CodePostal;
-            sageClient.Adresse.Ville = client.Ville;
-            sageClient.Adresse.Pays = client.Pays;
+            sageClient.Adresse.Adresse = client.MainAddress.MainAddress;
+            sageClient.Adresse.Complement = client.MainAddress.AdressAdditional;
+            sageClient.Adresse.CodePostal = client.MainAddress.ZipCode;
+            sageClient.Adresse.Ville = client.MainAddress.City;
+            sageClient.Adresse.Pays = client.MainAddress.Country;
             sageClient.CT_Identifiant = client.CT_Identifiant;
            return sageClient;
         }
@@ -33,11 +33,11 @@ namespace Infrastructure.Data.Mapper
             sageClient.Telecom.Portable = client.Portable;
             sageClient.Telecom.Telecopie = client.Telecopie;
             sageClient.Telecom.Telephone = client.Telephone;
-            sageClient.Adresse.Adresse = client.Adresse;
-            sageClient.Adresse.Complement = client.Complement;
-            sageClient.Adresse.CodePostal = client.CodePostal;
-            sageClient.Adresse.Ville = client.Ville;
-            sageClient.Adresse.Pays = client.Pays;
+            sageClient.Adresse.Adresse = client.MainAddress.MainAddress;
+            sageClient.Adresse.Complement = client.MainAddress.AdressAdditional;
+            sageClient.Adresse.CodePostal = client.MainAddress.ZipCode;
+            sageClient.Adresse.Ville = client.MainAddress.City;
+            sageClient.Adresse.Pays = client.MainAddress.Country;
             sageClient.CT_Identifiant = client.CT_Identifiant;
             return sageClient;
         }
@@ -53,11 +53,11 @@ namespace Infrastructure.Data.Mapper
             client.Portable = sageClient.Telecom.Portable;
             client.Telecopie = sageClient.Telecom.Telecopie;
             client.Telephone = sageClient.Telecom.Telephone;
-            client.Adresse = sageClient.Adresse.Adresse;
-            client.Complement = sageClient.Adresse.Complement;
-            client.CodePostal = sageClient.Adresse.CodePostal;
-            client.Ville = sageClient.Adresse.Ville;
-            client.Pays = sageClient.Adresse.Pays;
+            client.MainAddress.MainAddress = sageClient.Adresse.Adresse;
+            client.MainAddress.AdressAdditional = sageClient.Adresse.Complement;
+            client.MainAddress.ZipCode = sageClient.Adresse.CodePostal;
+            client.MainAddress.City = sageClient.Adresse.Ville;
+            client.MainAddress.Country = sageClient.Adresse.Pays;
             client.CT_Identifiant = sageClient.CT_Identifiant;
             return client;
         }
@@ -103,7 +103,6 @@ namespace Infrastructure.Data.Mapper
             }
             catch(Exception e)
             {
-
                 return sageOrder;
             }
         }
