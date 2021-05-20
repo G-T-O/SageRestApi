@@ -16,7 +16,6 @@ namespace Application.Services
             _clientRepository = clientRepository;
             _sageClientRepository = sageClientRepository;
         }
-
         public Task<string> Create(Client client)
         {
             return  _sageClientRepository.Create(client);
