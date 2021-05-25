@@ -1,66 +1,118 @@
 ﻿using Core.Dto;
+using Core.Entities;
 using Objets100cLib;
 using System;
+using System.Threading.Tasks;
 
 namespace Infrastructure.Data.Mapper
 {
     public static class ObjectMapper
     {
-        public static IBOClient3 ClientToNewIboClient(Client client,IBOClient3 sageClient)
+        public static IBOClient3 CreateClientToIboClient(Client client,IBOClient3 sageClient)
         {
-            sageClient.CT_Intitule = client.CT_Intitule;
-            sageClient.CT_Qualite = client.CT_Qualite;
-            sageClient.Telecom.EMail = client.Email;
-            sageClient.Telecom.Portable = client.Portable;
-            sageClient.Telecom.Telecopie = client.Telecopie;
-            sageClient.Telecom.Telephone = client.Telephone;
-            sageClient.Adresse.Adresse = client.Adresse;
-            sageClient.Adresse.Complement = client.Complement;
-            sageClient.Adresse.CodePostal = client.CodePostal;
-            sageClient.Adresse.Ville = client.Ville;
-            sageClient.Adresse.Pays = client.Pays;
-            sageClient.CT_Identifiant = client.CT_Identifiant;
-           return sageClient;
-        }
+            sageClient.CT_Siret = client.Siret;
+            sageClient.CT_Intitule = client.CompanyName;
+            sageClient.CT_Qualite = client.LegalForm;
+            sageClient.CT_Classement = client.CompanyName.Length > 17 ? client.CompanyName.Substring(0, 17) : client.CompanyName;
+            sageClient.CT_Identifiant = client.VatIdentifier;
+            sageClient.CT_Ape = client.Naf;
+            
+            sageClient.Telecom.EMail = client.CompanyEmail;
+            sageClient.Telecom.Portable = client.CompanyPhoneNumber;
+            sageClient.Telecom.Telecopie = client.CompanyFax;
+            sageClient.Telecom.Telephone = client.CompanyMobile;
 
-        public static IBOClient3 ClientToIboClient(Client client, IBOClient3 sageClient)
-        {
-            sageClient.CT_Num = client.CT_Num;
-            sageClient.CT_Siret = client.CT_Siret;
-            sageClient.CT_Intitule = client.CT_Intitule;
-            sageClient.CT_Qualite = client.CT_Qualite;
-            sageClient.Telecom.EMail = client.Email;
-            sageClient.Telecom.Portable = client.Portable;
-            sageClient.Telecom.Telecopie = client.Telecopie;
-            sageClient.Telecom.Telephone = client.Telephone;
-            sageClient.Adresse.Adresse = client.Adresse;
-            sageClient.Adresse.Complement = client.Complement;
-            sageClient.Adresse.CodePostal = client.CodePostal;
-            sageClient.Adresse.Ville = client.Ville;
-            sageClient.Adresse.Pays = client.Pays;
-            sageClient.CT_Identifiant = client.CT_Identifiant;
+            sageClient.Adresse.Adresse = client.MainAddress.MainAddress;
+            sageClient.Adresse.Complement = client.MainAddress.AdressAdditional;
+            sageClient.Adresse.CodePostal = client.MainAddress.ZipCode;
+            sageClient.Adresse.Ville = client.MainAddress.City;
+            sageClient.Adresse.Pays = client.MainAddress.Country;
+            sageClient.WriteDefault();
+
+            foreach (var contact in client.Contacts)
+            {
+                IBOTiersContact3 sageContact = (IBOTiersContact3)sageClient.FactoryTiersContact.Create();
+                sageContact.CouldModified();
+                sageContact.Civilite = (ContactCivilite)contact.Civility;
+                sageContact.Nom = contact.LastName;
+                sageContact.Prenom = contact.FirstName;
+                sageContact.Telecom.Telephone = contact.PhoneNumber;
+                sageContact.Telecom.Portable = contact.MobileNumber;
+                sageContact.Telecom.EMail = contact.Email;
+                sageContact.Fonction = contact.Position;
+                sageContact.Write();
+            }
+            sageClient.Read();
             return sageClient;
         }
+        public static Task<Client> ClientEntityToDtoClient(ClientEntity clientEntity)
+        {
+            Client customer = new Client();
+            customer.CompanyName = clientEntity.CT_Intitule;
+            customer.SageCode = clientEntity.CT_Num;
+            customer.Siret = clientEntity.CT_Siret;
+            customer.VatIdentifier = clientEntity.CT_Identifiant;
+            customer.LeaderCivility = clientEntity.CT_Civilite;
+            customer.LeaderFirstName = clientEntity.CT_Prenom;
+            customer.LeaderLastName = clientEntity.CT_Nom;
+            customer.LegalForm = clientEntity.CT_Qualite;
+            customer.MainAddress.MainAddress = clientEntity.CT_Adresse;
+            customer.MainAddress.AdressAdditional = clientEntity.CT_Complement;
+            customer.MainAddress.City = clientEntity.CT_Ville;
+            customer.MainAddress.Country = clientEntity.CT_Pays;
+            customer.MainAddress.ZipCode = clientEntity.CT_CodePostal;
+            customer.Naf = clientEntity.CT_Ape;
+            customer.CompanyEmail = clientEntity.CT_Email;
+            customer.OwnerPhoneNumber = clientEntity.CT_Telephone;
+            return Task.FromResult(customer);
+        }
 
+       public static IBOClient3 UpdateClientToIboClient(Client client, IBOClient3 sageClient)
+        {
+            sageClient.CT_Siret = client.Siret; // check 
+            sageClient.CT_Intitule = client.CompanyName; // check
+            sageClient.CT_Qualite = client.LegalForm;
+            sageClient.CT_Ape = client.Naf;
+            sageClient.CT_Classement = client.CompanyName.Length > 17 ? client.CompanyName.Substring(0, 17) : client.CompanyName;
+            sageClient.CT_Identifiant = client.VatIdentifier;
+
+            sageClient.Telecom.EMail = client.CompanyEmail;
+            sageClient.Telecom.Telephone = client.OwnerPhoneNumber;
+            sageClient.Telecom.EMail = client.CompanyEmail;
+            sageClient.Telecom.Portable = client.CompanyMobile;
+            sageClient.Telecom.Telecopie = client.CompanyFax;
+            sageClient.Telecom.Telephone = client.CompanyMobile;
+
+            sageClient.Adresse.Adresse = client.MainAddress.MainAddress;
+            sageClient.Adresse.Complement = client.MainAddress.AdressAdditional;
+            sageClient.Adresse.CodePostal = client.MainAddress.ZipCode;
+            sageClient.Adresse.Ville = client.MainAddress.City;
+            sageClient.Adresse.Pays = client.MainAddress.Country;
+            sageClient.CT_Identifiant = client.VatIdentifier;
+            sageClient.WriteDefault();
+            // To do add delivery add
+            return sageClient;
+        }
+/* 
         public static Client IboClientToClient(IBOClient3 sageClient)
         {
             Client client = new Client();
-            client.CT_Num = sageClient.CT_Num;
-            client.CT_Siret = sageClient.CT_Siret;
-            client.CT_Intitule = sageClient.CT_Intitule;
-            client.CT_Qualite = sageClient.CT_Qualite;
-            client.Email = sageClient.Telecom.EMail;
+            client.SageCode = sageClient.CT_Num;
+            client.Siret = sageClient.CT_Siret;
+            client.CompanyName = sageClient.CT_Intitule;
+            client.LegalForm = sageClient.CT_Qualite;
+            client.CompanyEmail = sageClient.Telecom.EMail;
             client.Portable = sageClient.Telecom.Portable;
-            client.Telecopie = sageClient.Telecom.Telecopie;
-            client.Telephone = sageClient.Telecom.Telephone;
-            client.Adresse = sageClient.Adresse.Adresse;
-            client.Complement = sageClient.Adresse.Complement;
-            client.CodePostal = sageClient.Adresse.CodePostal;
-            client.Ville = sageClient.Adresse.Ville;
-            client.Pays = sageClient.Adresse.Pays;
-            client.CT_Identifiant = sageClient.CT_Identifiant;
+            client.CompanyFax = sageClient.Telecom.Telecopie;
+            client.CompanyMobile = sageClient.Telecom.Telephone;
+            client.MainAddress.MainAddress = sageClient.Adresse.Adresse;
+            client.MainAddress.AdressAdditional = sageClient.Adresse.Complement;
+            client.MainAddress.ZipCode = sageClient.Adresse.CodePostal;
+            client.MainAddress.City = sageClient.Adresse.Ville;
+            client.MainAddress.Country = sageClient.Adresse.Pays;
+            client.VatIdentifier = sageClient.CT_Identifiant;
             return client;
-        }
+        }*/
 
         public static Order IboOrderToOrder(IBODocumentVente3 orderHeader)
         {
@@ -103,7 +155,6 @@ namespace Infrastructure.Data.Mapper
             }
             catch(Exception e)
             {
-
                 return sageOrder;
             }
         }

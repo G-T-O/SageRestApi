@@ -13,9 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Entities\" />
     <Folder Include="Responses\" />
-    <Folder Include="Requests\" />
   </ItemGroup>
 
 </Project>

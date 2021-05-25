@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Infrastructure.Data.IDBAccess;
 using Core.Dto;
-using Infrastructure.Data.Mapper;
 using Objets100cLib;
 using Infrastructure.IRepositories.Sage;
 
@@ -15,14 +14,14 @@ namespace Infrastructure.Data.Repositories
         {
             _sageAccess = sageAccess;
         }
-        public async Task<int> AddAsync(Order order)
+        public Task<string> Create(Order order)
         {
             lock (_sageAccess.DatabaseLock)
             {
                 if (Utility.ComObject.Open(_sageAccess) == false)
                 {
                         Utility.ComObject.Close(_sageAccess);
-                    return  1;
+                    return null;
                 }
                 IBODocumentVente3 orderHeader = _sageAccess.GetSageDatabase.FactoryDocumentVente.CreateType(DocumentType.DocumentTypeVenteCommande);
                 IBOClient3 tiersPayeur = _sageAccess.GetSageDatabase.CptaApplication.FactoryClient.ReadNumero(order.DO_Tiers);
@@ -52,29 +51,30 @@ namespace Infrastructure.Data.Repositories
                            //Log
                         }
                     }
+                    string result = orderHeader.DO_Piece;
                     Utility.ComObject.Close(_sageAccess);
-                    return 0;
+                    return Task.FromResult(result);
                 }
                 catch (Exception e)
                 {
                         Utility.ComObject.Close(_sageAccess);
-                    return 1;
+                    return null ;
                 }
             }
         }
 
-        public async Task<int> DeleteAsync(string id)
+        public Task<int> Delete(string id)
         {
             lock (_sageAccess.DatabaseLock)
             {
                 if (Utility.ComObject.Open(_sageAccess) == false)
                 {
-                    return 1;
+                    return Task.FromResult(1);
                 }
 
                 if(_sageAccess.GetSageDatabase.FactoryDocumentVente.ExistPiece(DocumentType.DocumentTypeVenteCommande, id) == false)
                 {
-                    return 1;
+                    return Task.FromResult(1);
                 }
                 IBODocumentVente3 docEntete = _sageAccess.GetSageDatabase.FactoryDocumentVente.ReadPiece(DocumentType.DocumentTypeVenteCommande,id);
                 try
@@ -86,50 +86,14 @@ namespace Infrastructure.Data.Repositories
                     docEntete.Remove();
 
                     Utility.ComObject.Close(_sageAccess);
-                    return 0;
+                    return Task.FromResult(0);
                 }
                 catch (Exception e)
                 {
                     Utility.ComObject.Close(_sageAccess);
-                    return 1;
+                    return Task.FromResult(1);
                 }
             }
-        }
-
-        public async Task<Order> GetByIdAsync(string id)
-        {
-            lock (_sageAccess.DatabaseLock)
-            {
-                Order sageOrder=null;
-                if (Utility.ComObject.Open(_sageAccess) == false)
-                {
-                    return sageOrder;
-                }
-
-                if (_sageAccess.GetSageDatabase.FactoryDocumentVente.ExistPiece(DocumentType.DocumentTypeVenteCommande, id) == false)
-                {
-                    return sageOrder;
-                }
-                IBODocumentVente3 orderHeader = _sageAccess.GetSageDatabase.FactoryDocumentVente.ReadPiece(DocumentType.DocumentTypeVenteCommande, id);
-               
-                try
-                {
-                    sageOrder = ObjectMapper.IboOrderToOrder(orderHeader);
-                    Utility.ComObject.Close(_sageAccess);
-                    return sageOrder;
-                }
-                catch (Exception e)
-                {
-                    Utility.ComObject.Close(_sageAccess);
-                    return sageOrder;
-                }
-            }
-          
-        }
-
-        public Task<int> UpdateAsync(Order entity)
-        {
-            throw new NotImplementedException();
         }
     }
 }

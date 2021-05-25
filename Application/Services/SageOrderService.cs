@@ -12,24 +12,14 @@ namespace Application.Services
         {
             _sageOrderRepository = sageOrderRepository;
         }
-        public async Task<int> AddAsync(Order order)
+        public async Task<string> Create(Order order)
         {
-         return await _sageOrderRepository.AddAsync(order);
+         return await _sageOrderRepository.Create(order);
         }
 
-        public async Task<int> DeleteAsync(string id)
+        public async Task<int> Delete(string id)
         {
-          return await _sageOrderRepository.DeleteAsync(id);
-        }
-
-        public async Task<Order> GetByIdAsync(string id)
-        {
-            return await _sageOrderRepository.GetByIdAsync(id);
-        }
-
-        public async Task<int> UpdateAsync(Order order)
-        {
-            return await _sageOrderRepository.UpdateAsync(order);
+          return await _sageOrderRepository.Delete(id);
         }
     }
 }

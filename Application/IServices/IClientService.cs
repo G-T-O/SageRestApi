@@ -6,8 +6,8 @@ namespace Application.IServices
     public interface IClientService
     {
         Task<Client> GetByIdAsync(string id);
-        Task<int> AddAsync(Client entity);
-        Task<int> UpdateAsync(Client entity);
-        Task<int> DeleteAsync(string id);
+        Task<string> Create(Client entity);
+        Task<int> Update(Client entity);
+        Task<int> Delete(string id);
     }
 }

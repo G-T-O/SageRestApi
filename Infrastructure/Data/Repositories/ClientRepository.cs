@@ -1,9 +1,10 @@
 ﻿using Infrastructure.Data.IDBAccess;
-using Core.Dto;
 using Dapper;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
 using Infrastructure.IRepositories.SQL;
+using System;
+using Core.Entities;
 
 namespace Infrastructure.Data.Repositories
 {
@@ -14,35 +15,22 @@ namespace Infrastructure.Data.Repositories
         {
             _dapperAccess = dapperAccess;
         }
-        public async Task<int> AddAsync(Client client)
+
+        public Task<bool> ClientExistByIdAsync(string sageCode)
         {
-            using (var connection = new SqlConnection(_dapperAccess.GetConnectionString))
-            {
-                return await connection.ExecuteAsync("INSERT INTO F_COMPTET (CT_Num) VALUES (@CT_Num)", client);
-            }
+            throw new System.NotImplementedException();
         }
 
-        public async Task<int> DeleteAsync(string CT_Num)
+        public async Task<ClientEntity> GetByIdAsync(string CT_Num)
         {
+            if (string.IsNullOrEmpty(CT_Num))
+                throw new Exception("Client not found");
             using (var connection = new SqlConnection(_dapperAccess.GetConnectionString))
             {
-                return await connection.ExecuteAsync("DELETE F_COMPTET WHERE CT_Num = @CT_Num", new { CT_Num });
-            }
-        }
-
-        public async Task<Client> GetByIdAsync(string CT_Num)
-        {
-            using (var connection = new SqlConnection(_dapperAccess.GetConnectionString))
-            {
-                return await connection.QueryFirstOrDefaultAsync<Client>("SELECT CT_Num FROM F_COMPTET WHERE CT_Num = @CT_Num", new { CT_Num });
-            }
-        }
-
-        public async Task<int> UpdateAsync(Client client)
-        {
-            using (var connection = new SqlConnection(_dapperAccess.GetConnectionString))
-            {
-                return await connection.ExecuteAsync("UPDATE F_COMPTET SET CT_Siret = @CT_Siret WHERE CT_Num=@CT_Num", client);
+                var result = await connection.QueryFirstOrDefaultAsync<Core.Entities.ClientEntity>("SELECT * FROM F_COMPTET WHERE CT_Num = @CT_Num", new { CT_Num });
+                if (result == null)
+                    throw new Exception("Client not found");
+                return result;
             }
         }
     }
