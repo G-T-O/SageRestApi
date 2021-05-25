@@ -1,5 +1,6 @@
 ﻿using Application.IServices;
 using Core.Dto;
+using Infrastructure.Data.Mapper;
 using Infrastructure.IRepositories.Sage;
 using Infrastructure.IRepositories.SQL;
 using System.Threading.Tasks;
@@ -28,7 +29,7 @@ namespace Application.Services
 
         public async Task<Client> GetByIdAsync(string id)
         {
-           return await _clientRepository.GetByIdAsync(id);
+           return await ObjectMapper.ClientEntityToDtoClient(await _clientRepository.GetByIdAsync(id));
         }
 
         public async Task<int> Update(Client client)

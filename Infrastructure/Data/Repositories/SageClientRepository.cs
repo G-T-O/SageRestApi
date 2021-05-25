@@ -22,14 +22,14 @@ namespace Infrastructure.Data.Repositories
             {
                 if (Utility.ComObject.Open(_sageDataAccess) == false)
                 {
-                    return null;
+                    throw new Exception("Error while opening the com database");
                 }
 
                 try
                 {
                     IBOClient3 sageClient = (IBOClient3)_sageDataAccess.GetSageDatabase.CptaApplication.FactoryClient.Create();
                     sageClient.CT_Num = _sageDataAccess.GetSageDatabase.CptaApplication.FactoryTiersType.ReadTypeTiers(TiersType.TiersTypeClient).NextCT_Num;
-                    sageClient.CategorieCompta = _sageDataAccess.GetSageDatabase.FactoryCategorieComptaVente.ReadIntitule("France"); // TO DO 
+                    sageClient.CategorieCompta = _sageDataAccess.GetSageDatabase.FactoryCategorieComptaVente.ReadIntitule("France"); // TO DO add other country and new VAT ID EU / EXO / FR / DOM 7,5.5,20,0 %
                     sageClient.CompteGPrinc = (IBOCompteG3)_sageDataAccess.GetSageDatabase.CptaApplication.FactoryCompteG.ReadNumero("411000");
                     sageClient = ObjectMapper.CreateClientToIboClient(client, sageClient);
                     Utility.ComObject.Close(_sageDataAccess);
@@ -54,16 +54,24 @@ namespace Infrastructure.Data.Repositories
             {
                 if (Utility.ComObject.Open(_sageDataAccess) == false)
                 {
-                    return Task.FromResult(0);
+                    throw new Exception("Error while opening the com database");
                 }
                 if (_sageDataAccess.GetSageDatabase.CptaApplication.FactoryClient.ExistNumero(ct_num) == false)
                 {
                     Utility.ComObject.Close(_sageDataAccess);
-                    return Task.FromResult(0);
+                    throw new Exception("Error client not found");
                 }
-                _sageDataAccess.GetSageDatabase.CptaApplication.FactoryClient.ReadNumero(ct_num).Remove();
-                Utility.ComObject.Close(_sageDataAccess);
-                return Task.FromResult(1);
+                try
+                {
+                    IBOClient3 client = _sageDataAccess.GetSageDatabase.CptaApplication.FactoryClient.ReadNumero(ct_num);
+                    client.Remove();
+                    Utility.ComObject.Close(_sageDataAccess);
+                    return Task.FromResult(1);
+                }catch(Exception e)
+                {
+                    Utility.ComObject.Close(_sageDataAccess);
+                    throw;
+                }
             }
         }
 
@@ -73,20 +81,26 @@ namespace Infrastructure.Data.Repositories
             {
                 if (Utility.ComObject.Open(_sageDataAccess) == false)
                 {
-                    return Task.FromResult(0);
+                    throw new Exception("Error while opening the com database");
                 }
                 if (_sageDataAccess.GetSageDatabase.CptaApplication.FactoryClient.ExistNumero(client.SageCode) == false)
                 {
                     Utility.ComObject.Close(_sageDataAccess);
-                    return Task.FromResult(0);
+                    throw new Exception("Error client not found");
                 }
 
-                IBOClient3 sageClient = _sageDataAccess.GetSageDatabase.CptaApplication.FactoryClient.ReadNumero(client.SageCode);
-              //  sageClient = ObjectMapper.ClientToIboClient(client,sageClient);
-                sageClient.Write();
+                try
+                {
+                    IBOClient3 sageClient = _sageDataAccess.GetSageDatabase.CptaApplication.FactoryClient.ReadNumero(client.SageCode);
+                    sageClient = ObjectMapper.UpdateClientToIboClient(client,sageClient);
+                    Utility.ComObject.Close(_sageDataAccess);
+                    return Task.FromResult(1);
 
-                Utility.ComObject.Close(_sageDataAccess);
-                return Task.FromResult(1);
+                }catch(Exception e)
+                {
+                    Utility.ComObject.Close(_sageDataAccess);
+                    throw;
+                }
             }
         }
     }

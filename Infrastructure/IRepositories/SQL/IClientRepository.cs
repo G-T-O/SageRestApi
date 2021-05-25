@@ -1,11 +1,11 @@
-﻿using Core.Dto;
+﻿using Core.Entities;
 using System.Threading.Tasks;
 
 namespace Infrastructure.IRepositories.SQL
 {
     public interface IClientRepository
     {
-        Task<Client> GetByIdAsync(string sageCode);
+        Task<ClientEntity> GetByIdAsync(string sageCode);
         Task<bool> ClientExistByIdAsync(string sageCode);
     }
 }
