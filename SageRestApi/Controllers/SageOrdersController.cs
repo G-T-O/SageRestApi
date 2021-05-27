@@ -1,7 +1,7 @@
 ﻿using System.Net.Mime;
 using System.Threading.Tasks;
 using Application.IServices;
-using Core.Dto;
+using Core.Dto.Requests;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -31,7 +31,7 @@ namespace SageRestApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)] // add model API error
         [Produces(MediaTypeNames.Application.Json)]
         [HttpPost]
-        public async Task<IActionResult> CreateOrder(Order order)
+        public async Task<IActionResult> CreateOrder(OrderRequest order)
         {
             return Ok(await _sageOrderService.Create(order));
         }
@@ -47,10 +47,10 @@ namespace SageRestApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)] // add model API error
         [Produces(MediaTypeNames.Application.Json)]
-        [HttpDelete("{orderNum}")]
-        public async Task<IActionResult> DeleteOrder(string orderNum)
+        [HttpDelete("{orderCode}")]
+        public async Task<IActionResult> DeleteOrder(string orderCode)
         {
-            return Ok(await _sageOrderService.Delete(orderNum));
+            return Ok(await _sageOrderService.Delete(orderCode));
         }
     }
 }

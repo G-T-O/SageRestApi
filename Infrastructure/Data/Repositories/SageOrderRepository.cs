@@ -4,6 +4,7 @@ using Infrastructure.Data.IDBAccess;
 using Core.Dto;
 using Objets100cLib;
 using Infrastructure.IRepositories.Sage;
+using Core.Dto.Requests;
 
 namespace Infrastructure.Data.Repositories
 {
@@ -14,7 +15,7 @@ namespace Infrastructure.Data.Repositories
         {
             _sageAccess = sageAccess;
         }
-        public Task<string> Create(Order order)
+        public Task<string> Create(OrderRequest order)
         {
             lock (_sageAccess.DatabaseLock)
             {
@@ -24,13 +25,13 @@ namespace Infrastructure.Data.Repositories
                     return null;
                 }
                 IBODocumentVente3 orderHeader = _sageAccess.GetSageDatabase.FactoryDocumentVente.CreateType(DocumentType.DocumentTypeVenteCommande);
-                IBOClient3 tiersPayeur = _sageAccess.GetSageDatabase.CptaApplication.FactoryClient.ReadNumero(order.DO_Tiers);
+                IBOClient3 tiersPayeur = _sageAccess.GetSageDatabase.CptaApplication.FactoryClient.ReadNumero(order.SageCodeClient);
                 IBODocumentVenteLigne3 orderLines;
 
                 try
                 {
                     orderHeader.SetDefaultClient(tiersPayeur);
-                    orderHeader.DO_Ref = order.DO_Ref;
+                    orderHeader.DO_Ref = order.Reference;
                     orderHeader.DO_Date = DateTime.Now;
                     orderHeader.DO_Statut = DocumentStatutType.DocumentStatutTypeConfirme;
                     orderHeader.SetDefaultDO_Piece();
@@ -38,12 +39,16 @@ namespace Infrastructure.Data.Repositories
                     orderHeader.CouldModified();
                     orderHeader.Write();
 
-                    foreach (DocLine docLine in order.DocLines)
+                    foreach (Article article in order.Articles)
                     {
-                        if (_sageAccess.GetSageDatabase.FactoryArticle.ExistReference(docLine.AR_Ref))
+                        if (_sageAccess.GetSageDatabase.FactoryArticle.ExistReference(article.ArticleCode))
                         {
                             orderLines = (IBODocumentVenteLigne3)orderHeader.FactoryDocumentLigne.Create();
-                            orderLines.SetDefaultArticle(_sageAccess.GetSageDatabase.FactoryArticle.ReadReference(docLine.AR_Ref), docLine.DL_Qte);
+                            orderLines.SetDefaultArticle(_sageAccess.GetSageDatabase.FactoryArticle.ReadReference(article.ArticleCode), article.ArticleQte);
+                            orderLines.Remise.Remise[1].REM_Type = RemiseType.RemiseTypePourcent;
+                            orderLines.Remise.Remise[1].REM_Valeur = article.FirstDiscount;
+                            orderLines.Remise.Remise[2].REM_Type = RemiseType.RemiseTypePourcent;
+                            orderLines.Remise.Remise[2].REM_Valeur = article.SecondDiscount;
                             orderLines.WriteDefault();
                         }
                         else
@@ -58,7 +63,7 @@ namespace Infrastructure.Data.Repositories
                 catch (Exception e)
                 {
                         Utility.ComObject.Close(_sageAccess);
-                    return null ;
+                    throw;
                 }
             }
         }
@@ -91,7 +96,7 @@ namespace Infrastructure.Data.Repositories
                 catch (Exception e)
                 {
                     Utility.ComObject.Close(_sageAccess);
-                    return Task.FromResult(1);
+                    throw;
                 }
             }
         }
